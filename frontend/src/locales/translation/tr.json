@@ -1,0 +1,8 @@
+{
+  "singup": "Kayit Ol",
+  "userName": "Kullanici Adi",
+  "email": "E-posta",
+  "password": "Sifre",
+  "confirmPassword": "Sifre Tekrar",
+  "passwordMismatch": "Sifreler uyusmuyor"
+}
