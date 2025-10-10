@@ -4,11 +4,14 @@ import com.toDo.error.ApiError;
 import com.toDo.shared.GenericMessage;
 import com.toDo.shared.Messages;
 import com.toDo.user.dto.UserCreate;
+import com.toDo.user.dto.UserResponseDTO;
 import com.toDo.user.exception.ActivationEmailException;
 import com.toDo.user.exception.InvalidTokenException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -41,8 +44,8 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    List<User> getAllUsers(){
-        return userService.findAll();
+    Page<UserResponseDTO> getAllUsers(Pageable pageable){
+        return userService.findAll(pageable).map(UserResponseDTO::fromUser);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

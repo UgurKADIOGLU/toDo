@@ -21,9 +21,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    Boolean active;
+    private Boolean active;
 
-    String activationToken;
+    private String activationToken;
 
     @Column()
     @NotBlank(message = "{hoxify.constraint.username.notblank}")
@@ -46,6 +46,8 @@ public class User {
 
 
     private LocalDateTime updatedAt;
+
+    private String image;
 
     @PrePersist
     protected void onCreate() {

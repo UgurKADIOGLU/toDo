@@ -5,6 +5,9 @@ import com.toDo.user.exception.ActivationEmailException;
 import com.toDo.user.exception.InvalidTokenException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -52,7 +55,7 @@ public class UserService {
         userRepository.saveAndFlush(user);
     }
 
-    public List<User> findAll() {
-       return userRepository.findAll();
+    public Page<User> findAll(Pageable pageable) {
+       return userRepository.findAll(pageable);
     }
 }
