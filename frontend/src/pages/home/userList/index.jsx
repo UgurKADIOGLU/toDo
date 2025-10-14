@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import getUsers from "./api";
+import defaultProfileImage from "../../../assets/profile.png";
+import { Link } from "react-router-dom";
 
 function UserList() {
   const [users, setUsers] = useState({
@@ -44,8 +46,11 @@ function UserList() {
         <div className="list-group">
           {users.content.map((user) => (
             <div key={user.id} className="list-group-item list-group-item-action">
+              <Link to={`/user/${user.id}`} className="d-flex align-items-center text-decoration-none text-dark">
+              <img width={30} className="img-fluid rounded-circle" src={defaultProfileImage} />
               <h5 className="mb-1">{user.username}</h5>
               <small className="text-muted">{user.email}</small>
+              </Link>
             </div>
           ))}
         </div>

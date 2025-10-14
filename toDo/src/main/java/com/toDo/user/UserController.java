@@ -7,6 +7,9 @@ import com.toDo.user.dto.UserCreate;
 import com.toDo.user.dto.UserResponseDTO;
 import com.toDo.user.exception.ActivationEmailException;
 import com.toDo.user.exception.InvalidTokenException;
+import com.toDo.user.exception.NotFoundException;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -17,7 +20,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -48,6 +50,14 @@ public class UserController {
         return userService.findAll(pageable).map(UserResponseDTO::fromUser);
     }
 
+    @GetMapping("/users/{id}")
+    public UserResponseDTO getUserById(@PathVariable Long id) {
+
+
+        return UserResponseDTO.fromUser(userService.findById(id));
+    }
+
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     ResponseEntity<ApiError> handleValidationExceptions(MethodArgumentNotValidException ex) {
         ApiError apiError = new ApiError();
@@ -71,10 +81,20 @@ public class UserController {
         return ResponseEntity.status(502).body(apiError);
     }
 
+
+
     @ExceptionHandler(InvalidTokenException.class)
     ResponseEntity<ApiError> invalidTokenException(InvalidTokenException ex) {
         ApiError apiError = new ApiError();
         apiError.setPath("/api/v1/users");
+        apiError.setMessage(ex.getMessage());
+        apiError.setStatus(400);
+        return ResponseEntity.status(400).body(apiError);
+    }
+    @ExceptionHandler(NotFoundException.class)
+    ResponseEntity<ApiError> EntityNotFoundExceptionHandler(NotFoundException ex, HttpServletRequest request) {
+        ApiError apiError = new ApiError();
+        apiError.setPath(request.getRequestURI());
         apiError.setMessage(ex.getMessage());
         apiError.setStatus(400);
         return ResponseEntity.status(400).body(apiError);

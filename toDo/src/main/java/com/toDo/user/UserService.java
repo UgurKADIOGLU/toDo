@@ -3,21 +3,16 @@ package com.toDo.user;
 import com.toDo.email.EmailService;
 import com.toDo.user.exception.ActivationEmailException;
 import com.toDo.user.exception.InvalidTokenException;
+import com.toDo.user.exception.NotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Properties;
 import java.util.UUID;
 
 
@@ -57,5 +52,9 @@ public class UserService {
 
     public Page<User> findAll(Pageable pageable) {
        return userRepository.findAll(pageable);
+    }
+
+    public User findById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
 }
